@@ -19,6 +19,7 @@ router.get("/trips", async(req, res) => {
       arrival: req.query.arrival, 
       date: { $gte: startDate, $lt: endDate }
     });
+<<<<<<< HEAD
 
     if(data.length === 0) {
       res.status(404).json({result: false, message: "Trips not found"});
@@ -26,6 +27,9 @@ router.get("/trips", async(req, res) => {
       res.status(201).json({result: true, trips: data});
     }
     
+=======
+        res.status(201).json({result: true, trips: data});
+>>>>>>> 4c76426 (route purchase)
 
   } catch(error) {
     res.status(500).json({result: false, message: "Server error"});
@@ -71,6 +75,46 @@ router.get("/cart", async (req, res) => {
 
   } catch(error) {
     res.status(404).json({result: false, message: "Trips not found"});
+  }
+});
+
+router.get("/purchase", async (req, res) => {
+  try {
+    const data = await Purchase.find();
+    res.status(200).json({ result: true, purchases: data });
+  } catch (error) {
+    res.status(404).json({ result: false, message: "Purchases not found" });
+  }
+});
+
+router.post("/purchase/:id", async (req, res) => {
+  try {
+    const purchaseData = await Purchase.findById(req.params.id);
+
+    console.log(purchaseData);
+
+    if (purchaseData) {
+      const newPurchase = new Purchase({
+        departure: purchaseData.departure,
+        arrival: purchaseData.arrival,
+        date: purchaseData.date,
+        price: purchaseData.price,
+      });
+
+      const savedPurchase = await newPurchase.save();
+
+      await Purchase.deleteOne({ _id: purchaseData._id });
+
+      res
+        .status(201)
+        .json({ result: true, message: "Purchase completed!", purchase: savedPurchase });
+    } else {
+      res
+        .status(404)
+        .json({ result: false, message: "Cart item not found!", data: purchaseData });
+    }
+  } catch (error) {
+    res.status(500).json({ result: false, message: error.message });
   }
 });
 
