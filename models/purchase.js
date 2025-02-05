@@ -5,8 +5,9 @@ const tripSchema = mongoose.Schema({
     arrival: String,
     date: Date,
     price: Number,
+    //a ajouter un timer pour le temps restant
 });
 
-const Purchase = mongoose.model('purchase', tripSchema);
+const Purchase = mongoose.model('purchases', tripSchema);
 
 module.exports = Purchase;
