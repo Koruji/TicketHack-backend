@@ -49,7 +49,7 @@ router.post("/book/:id", async(req, res) => {
   }
 });
 
-router.get("/book", async (req, res) => {
+router.get("/cart", async (req, res) => {
   try {
     
     const data = await Cart.find();
