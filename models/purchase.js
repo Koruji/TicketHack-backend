@@ -7,6 +7,6 @@ const tripSchema = mongoose.Schema({
     price: Number,
 });
 
-const Trip = mongoose.model('trips', tripSchema);
-module.exports = Trip;
+const Purchase = mongoose.model('purchase', tripSchema);
 
+module.exports = Purchase;
