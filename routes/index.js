@@ -1,6 +1,7 @@
 const Trips = require("../models/trips");
 const Cart = require("../models/cart");
 const Purchase = require("../models/purchase");
+const moment = require("moment");
 
 
 var express = require('express');
@@ -10,7 +11,14 @@ var router = express.Router();
 router.get("/trips", async(req, res) => {
   try {
 
-    const data = await Trips.find();
+    const startDate = moment(req.query.date, "YYYY-MM-DD").startOf("day").toDate();
+    const endDate = moment(req.query.date, "YYYY-MM-DD").endOf("day").toDate();
+
+    const data = await Trips.find({
+      departure: req.query.departure, 
+      arrival: req.query.arrival, 
+      date: { $gte: startDate, $lt: endDate }
+    });
     res.status(201).json({result: true, trips: data});
 
   } catch(error) {
