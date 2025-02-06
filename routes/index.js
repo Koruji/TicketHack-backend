@@ -19,17 +19,7 @@ router.get("/trips", async(req, res) => {
       arrival: req.query.arrival, 
       date: { $gte: startDate, $lt: endDate }
     });
-<<<<<<< HEAD
-
-    if(data.length === 0) {
-      res.status(404).json({result: false, message: "Trips not found"});
-    } else {
-      res.status(201).json({result: true, trips: data});
-    }
-    
-=======
         res.status(201).json({result: true, trips: data});
->>>>>>> 4c76426 (route purchase)
 
   } catch(error) {
     res.status(500).json({result: false, message: "Server error"});
