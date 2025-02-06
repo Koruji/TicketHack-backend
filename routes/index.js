@@ -66,10 +66,15 @@ router.get("/cart", async (req, res) => {
   try {
     
     const data = await Cart.find();
-    res.status(201).json({result: true, trips: data});
+    
+    if(data.length === 0) {
+      res.status(404).json({result: false, message: "Trips not found"});
+    } else {
+      res.status(201).json({result: true, trips: data});
+    }
 
   } catch(error) {
-    res.status(404).json({result: false, message: "Trips not found"});
+    res.status(500).json({result: false, message: "Server error"});
   }
 });
 
