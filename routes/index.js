@@ -76,6 +76,42 @@ router.post("/book/:id", async(req, res) => {
   }
 });
 
+//POST /cart/:id 
+//Résulat attendu : 
+// result: true,
+// message: "Trip remove from cart !"
+//tranfert un voyage de la collection carts vers la collection trips
+router.post("/cart/:id", async(req, res) => {
+  try {
+
+    const data = await Cart.findById(req.params.id);
+
+    console.log(data);
+
+    if(data) {
+      
+      const newTrip = new Trips({
+        departure: data.departure,
+        arrival: data.arrival,
+        date: data.date,
+        price: data.price,
+      });
+
+      await newTrip.save();
+
+      await Cart.deleteOne({_id: data._id});
+
+      res.status(201).json({result: true, message: "Trip remove from cart !"});
+
+    } else {
+      res.status(404).json({result: false, message: "Trip not found !", data : data});
+    }
+
+  } catch(error) {
+    res.status(500).json({result: false, message: error });
+  }
+});
+
 //GET /cart 
 //Résulat attendu : 
 // result : true,
